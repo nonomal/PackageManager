@@ -16,15 +16,14 @@ android {
     }
 
     namespace 'com.smartpack.packagemanager'
-    compileSdkVersion 33
-    buildToolsVersion '30.0.3'
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.smartpack.packagemanager"
-        minSdkVersion 23
-        targetSdkVersion 33
-        versionCode 70
-        versionName "v7.0"
+        minSdkVersion 24
+        targetSdk 34
+        versionCode 72
+        versionName "v7.2"
         vectorDrawables.useSupportLibrary = true
         testFunctionalTest = false
         testHandleProfiling = false
@@ -41,7 +40,13 @@ android {
         }
     }
 
-    flavorDimensions "release"
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
+        aidl true
+    }
+
+    flavorDimensions.add("release")
     productFlavors {
         play {
             dimension "release"
@@ -56,10 +61,10 @@ android {
 }
 
 dependencies {
-    playImplementation 'com.android.billingclient:billing:6.0.0'
-    implementation 'com.github.apk-editor:aXML:8458ba5aee'
+    playImplementation 'com.android.billingclient:billing:7.1.1'
+    implementation 'com.github.apk-editor:aXML:20e62a1c11'
 
-    def sCommon_Version = 'aa1019da38'
+    def sCommon_Version = 'efc9dce669'
     implementation "com.github.sunilpaulmathew.sCommon:adapters:${sCommon_Version}"
     implementation "com.github.sunilpaulmathew.sCommon:crashreporter:${sCommon_Version}"
     implementation "com.github.sunilpaulmathew.sCommon:credits:${sCommon_Version}"
@@ -69,8 +74,11 @@ dependencies {
     implementation "com.github.sunilpaulmathew.sCommon:translatorutils:${sCommon_Version}"
 
     implementation "com.github.topjohnwu.libsu:core:4.0.3"
-    implementation 'com.google.android.material:material:1.9.0'
-    implementation "dev.rikka.shizuku:api:12.1.0"
-    implementation "dev.rikka.shizuku:provider:12.1.0"
-    implementation 'net.lingala.zip4j:zip4j:2.11.3'
+    implementation 'com.google.android.material:material:1.12.0'
+
+    def shizuku_Version = '13.1.5'
+    implementation "dev.rikka.shizuku:api:${shizuku_Version}"
+    implementation "dev.rikka.shizuku:provider:${shizuku_Version}"
+
+    implementation 'net.lingala.zip4j:zip4j:2.11.5'
 }

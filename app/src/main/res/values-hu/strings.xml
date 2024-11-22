@@ -61,7 +61,7 @@
     <string name="share_with">"Megosztás"</string>
     <string name="sort_by">"APK'-k rendezése"</string>
     <string name="source_code">"Forráskód"</string>
-    <string name="support">"Támogató Csoport"</string>
+    <string name="support">"Támogatócsoport"</string>
     <string name="support_acknowledged">"Adomány elismerve \u2665"</string>
     <string name="support_app">"Adományozói App vásárlása"</string>
     <string name="support_development">"Fejlesztői Támogatás"</string>
@@ -79,7 +79,10 @@
     <string name="uninstall_nope">"Sajnálom. Innen nem lehet ezt megtenni"</string>
     <string name="uninstall_summary">"%s eltávolítása"</string>
     <string name="uninstall_title">"Biztosan eltávolítja a(z) %s -t?"</string>
-    <string name="uninstall_warning">"Kérjük vegye figyelembe: A rendszeralkalmazások eltávolítása néha veszélyes lehet\n\n***<b>HASZNÁLJA FELELŐSÉGGEL</b>***\n"</string>
+    <string name="uninstall_warning">"Kérjük vegye figyelembe: A rendszeralkalmazások eltávolítása néha veszélyes lehet
+
+        ***<b>HASZNÁLJA FELELŐSÉGGEL</b>***
+        "</string>
     <string name="version">"Verzió: %s"</string>
     <string name="welcome_message">"Üdvözöljük a Package Managerben, amely egy egyszerű, ugyanakkor hatékony program az alkalmazások kezeléséhez."</string>
     <string name="wrong_extension">"Válasszon %s kiterjesztésű fájlt."</string>
@@ -157,7 +160,7 @@
     <string name="general">"Általános"</string>
     <string name="installer">"Telepítő"</string>
     <string name="installer_clicking">"A telepítőre kattintáskor"</string>
-    <string name="installer_file_picker">"Indítsa a fájlválasztót"</string>
+    <string name="installer_file_picker">"A fájlválasztó indítása"</string>
     <string name="installer_instructions">"Utasítások megjelenítése"</string>
     <string name="installer_summary">"A telepítendő fájlokat kiválaszthatja az oldal tetején lévő plusz gombra kattintva. A telepítő támogatja a következő csomagokat:"</string>
     <string name="never_show_page">"Ne jelenítse meg újra"</string>

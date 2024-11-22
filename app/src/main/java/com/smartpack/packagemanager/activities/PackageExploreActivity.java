@@ -16,19 +16,19 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.PopupMenu;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 import com.smartpack.packagemanager.R;
 import com.smartpack.packagemanager.adapters.PackageExploreAdapter;
 import com.smartpack.packagemanager.utils.Common;
 import com.smartpack.packagemanager.utils.FilePicker;
-import com.smartpack.packagemanager.utils.PackageData;
 import com.smartpack.packagemanager.utils.PackageExplorer;
 
 import java.io.File;
@@ -53,8 +53,8 @@ public class PackageExploreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_packageexplorer);
 
-        AppCompatImageButton mBack = findViewById(R.id.back);
-        AppCompatImageButton mSortButton = findViewById(R.id.sort);
+        MaterialButton mBack = findViewById(R.id.back);
+        MaterialButton mSortButton = findViewById(R.id.sort);
         mTitle = findViewById(R.id.title);
         MaterialTextView mError = findViewById(R.id.error_status);
         mRecyclerView = findViewById(R.id.recycler_view);
@@ -63,7 +63,7 @@ public class PackageExploreActivity extends AppCompatActivity {
 
         mBack.setOnClickListener(v -> {
             sFileUtils.delete(new File(getCacheDir().getPath(), "apk"));
-            super.onBackPressed();
+            finish();
         });
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, PackageExplorer.getSpanCount(this)));
@@ -79,7 +79,7 @@ public class PackageExploreActivity extends AppCompatActivity {
         PackageExploreAdapter.setOnItemClickListener((position, v) -> {
             String mPath = FilePicker.getData(this, false).get(position);
             if (position == 0) {
-                onBackPressed();
+                backPressedEvent();
             } else if (new File(mPath).isDirectory()) {
                 Common.setPath(mPath);
                 reload(this);
@@ -99,8 +99,7 @@ public class PackageExploreActivity extends AppCompatActivity {
                         .setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> {
                         })
                         .setPositiveButton(getString(R.string.export), (dialogInterface, i) -> PackageExplorer
-                                .copyToStorage(mPath, PackageData.getPackageDir(this) + "/" +
-                                        Common.getApplicationID(),this)).show();
+                                .copyToStorage(mPath, this)).show();
             }
         });
 
@@ -115,6 +114,13 @@ public class PackageExploreActivity extends AppCompatActivity {
                 return false;
             });
             popupMenu.show();
+        });
+
+        getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                backPressedEvent();
+            }
         });
     }
 
@@ -139,8 +145,7 @@ public class PackageExploreActivity extends AppCompatActivity {
         }.execute();
     }
 
-    @Override
-    public void onBackPressed() {
+    private void backPressedEvent() {
         if (Common.getPath().equals(getCacheDir().toString() + "/apk/")) {
             sFileUtils.delete(new File(getCacheDir().getPath(),"apk"));
             finish();

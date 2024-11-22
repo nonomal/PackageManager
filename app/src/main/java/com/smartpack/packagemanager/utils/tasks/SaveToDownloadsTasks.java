@@ -8,9 +8,11 @@
 
 package com.smartpack.packagemanager.utils.tasks;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Build;
+import android.os.Environment;
 
 import com.smartpack.packagemanager.R;
 import com.smartpack.packagemanager.utils.FileUtils;
@@ -18,6 +20,7 @@ import com.smartpack.packagemanager.utils.FileUtils;
 import java.io.File;
 import java.io.IOException;
 
+import in.sunilpaulmathew.sCommon.CommonUtils.sCommonUtils;
 import in.sunilpaulmathew.sCommon.CommonUtils.sExecutor;
 
 /*
@@ -47,21 +50,27 @@ public class SaveToDownloadsTasks extends sExecutor {
 
     @Override
     public void doInBackground() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            try {
-                FileUtils FileUtils = new FileUtils(mSource.getAbsolutePath());
-                FileUtils.setProgress(mProgressDialog);
+        try {
+            FileUtils FileUtils = new FileUtils(mSource.getAbsolutePath());
+            FileUtils.setProgress(mProgressDialog);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 FileUtils.copyToDownloads(mContext);
-            } catch (IOException ignored) {}
-        }
+            } else {
+                FileUtils.copy(new File(Environment.DIRECTORY_DOWNLOADS, mSource.getName()));
+            }
+        } catch (IOException ignored) {}
     }
 
+    @SuppressLint("StringFormatInvalid")
     @Override
     public void onPostExecute() {
         try {
             mProgressDialog.dismiss();
         } catch (IllegalArgumentException ignored) {
         }
+
+        sCommonUtils.toast(mSource.getName() + " " + mContext.getString(R.string.export_file_message,
+                Environment.DIRECTORY_DOWNLOADS), mContext).show();
     }
 
 }

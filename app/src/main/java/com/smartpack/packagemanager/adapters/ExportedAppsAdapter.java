@@ -23,12 +23,12 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 import com.smartpack.packagemanager.BuildConfig;
 import com.smartpack.packagemanager.R;
 import com.smartpack.packagemanager.utils.PackageData;
-import com.smartpack.packagemanager.utils.Utils;
 import com.smartpack.packagemanager.utils.tasks.SaveToDownloadsTasks;
 
 import java.io.File;
@@ -60,7 +60,7 @@ public class ExportedAppsAdapter extends RecyclerView.Adapter<ExportedAppsAdapte
         return new ExportedAppsAdapter.ViewHolder(rowItem);
     }
 
-    @SuppressLint({"StringFormatInvalid", "NotifyDataSetChanged"})
+    @SuppressLint("StringFormatInvalid")
     @Override
     public void onBindViewHolder(@NonNull ExportedAppsAdapter.ViewHolder holder, int position) {
         if (data.get(position).endsWith(".apk")) {
@@ -75,13 +75,12 @@ public class ExportedAppsAdapter extends RecyclerView.Adapter<ExportedAppsAdapte
                 holder.mIcon.setImageDrawable(sPackageUtils.getAppIcon(new File(data.get(position)).getName().replace(".apkm", ""), holder.mIcon.getContext()));
             } else {
                 holder.mIcon.setImageDrawable(sCommonUtils.getDrawable(R.drawable.ic_bundle, holder.mIcon.getContext()));
-                holder.mIcon.setColorFilter(Utils.getThemeAccentColor(holder.mIcon.getContext()));
             }
             holder.mTitle.setText(new File(data.get(position)).getName().replace(".apkm", ""));
         }
         holder.mTitle.setTextColor(sThemeUtils.isDarkTheme(holder.mTitle.getContext()) ? Color.WHITE : Color.BLACK);
         holder.mSize.setText(sAPKUtils.getAPKSize(new File(data.get(position)).length()));
-        holder.mAction.setImageDrawable(sCommonUtils.getDrawable(R.drawable.ic_settings, holder.mAction.getContext()));
+        holder.mAction.setIcon(sCommonUtils.getDrawable(R.drawable.ic_doubledots, holder.mAction.getContext()));
         holder.mAction.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
             Menu menu = popupMenu.getMenu();
@@ -116,7 +115,8 @@ public class ExportedAppsAdapter extends RecyclerView.Adapter<ExportedAppsAdapte
                                 .setPositiveButton(v.getContext().getString(R.string.delete), (dialog, id) -> {
                                     sFileUtils.delete(new File(data.get(position)));
                                     data.remove(position);
-                                    notifyDataSetChanged();
+                                    notifyItemRemoved(position);
+                                    notifyItemRangeChanged(position, data.size());
                                 }).show();
                         break;
                 }
@@ -132,7 +132,8 @@ public class ExportedAppsAdapter extends RecyclerView.Adapter<ExportedAppsAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final  AppCompatImageButton mAction, mIcon;
+        private final AppCompatImageButton mIcon;
+        private final MaterialButton mAction;
         private final MaterialTextView mTitle, mSize;
 
         public ViewHolder(View view) {

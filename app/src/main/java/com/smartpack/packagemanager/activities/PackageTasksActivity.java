@@ -11,6 +11,7 @@ package com.smartpack.packagemanager.activities;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
@@ -21,8 +22,6 @@ import com.smartpack.packagemanager.R;
 import com.smartpack.packagemanager.utils.Common;
 
 import java.lang.ref.WeakReference;
-
-import in.sunilpaulmathew.sCommon.CommonUtils.sCommonUtils;
 
 /*
  * Created by sunilpaulmathew <sunil.kde@gmail.com> on April 28, 2020
@@ -46,12 +45,18 @@ public class PackageTasksActivity extends AppCompatActivity {
         mScrollView = findViewById(R.id.scroll_view);
 
         mPackageTitle.setText(getIntent().getStringExtra(TITLE_START));
-        mCloseButton.setStrokeColor(sCommonUtils.getColor(R.color.colorAccent, this));
 
-        mCloseButton.setOnClickListener(v -> onBackPressed());
+        mCloseButton.setOnClickListener(v -> backPressedEvent());
 
         Thread mRefreshThread = new RefreshThread(this);
         mRefreshThread.start();
+
+        getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                backPressedEvent();
+            }
+        });
     }
 
     private class RefreshThread extends Thread {
@@ -85,12 +90,11 @@ public class PackageTasksActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
+    private void backPressedEvent() {
         if (Common.isRunning()) {
             return;
         }
-        super.onBackPressed();
+        finish();
     }
 
 }

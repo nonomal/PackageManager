@@ -18,13 +18,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 import com.smartpack.packagemanager.R;
 import com.smartpack.packagemanager.utils.Common;
-import com.smartpack.packagemanager.utils.PackageData;
 import com.smartpack.packagemanager.utils.PackageExplorer;
-import com.smartpack.packagemanager.utils.Utils;
 
 import java.io.File;
 import java.util.List;
@@ -38,9 +37,11 @@ import in.sunilpaulmathew.sCommon.PackageUtils.sPackageUtils;
 public class SplitAPKsAdapter extends RecyclerView.Adapter<SplitAPKsAdapter.ViewHolder> {
 
     private static List<String> data;
+    private final Activity activity;
 
-    public SplitAPKsAdapter(List<String> data) {
+    public SplitAPKsAdapter(List<String> data, Activity activity) {
         SplitAPKsAdapter.data = data;
+        this.activity = activity;
     }
 
     @NonNull
@@ -60,17 +61,17 @@ public class SplitAPKsAdapter extends RecyclerView.Adapter<SplitAPKsAdapter.View
                 .getContext()) + "/" + data.get(position), holder.mIcon.getContext()) != null) {
             holder.mIcon.setImageDrawable(sAPKUtils.getAPKIcon(sPackageUtils.getParentDir(Common.getApplicationID(), holder.mIcon
                     .getContext()) + "/" + data.get(position), holder.mIcon.getContext()));
-        } else {
-            holder.mIcon.setColorFilter(Utils.getThemeAccentColor(holder.mIcon.getContext()));
         }
         holder.mExport.setOnClickListener(v -> new MaterialAlertDialogBuilder(v.getContext())
+                .setIcon(R.mipmap.ic_launcher)
+                .setTitle(R.string.app_name)
                 .setMessage(v.getContext().getString(R.string.export_storage_message, new File(data.get(position)).getName()))
                 .setNegativeButton(v.getContext().getString(R.string.cancel), (dialogInterface, i) -> {
                 })
                 .setPositiveButton(v.getContext().getString(R.string.export), (dialogInterface, i) ->
                         PackageExplorer.copyToStorage(sPackageUtils.getParentDir(Common.getApplicationID(), holder.mIcon
-                                .getContext()) + "/" + data.get(position), PackageData.getPackageDir(v.getContext()) + "/" +
-                                Common.getApplicationID(), (Activity) v.getContext())).show()
+                                .getContext()) + "/" + data.get(position), activity)
+                ).show()
         );
     }
 
@@ -80,7 +81,8 @@ public class SplitAPKsAdapter extends RecyclerView.Adapter<SplitAPKsAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final AppCompatImageButton mExport, mIcon;
+        private final AppCompatImageButton mIcon;
+        private final MaterialButton mExport;
         private final MaterialTextView mName, mSize;
 
         public ViewHolder(View view) {
